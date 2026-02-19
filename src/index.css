@@ -1,0 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-black-han-sans: "Black Han Sans", sans-serif;
+}
