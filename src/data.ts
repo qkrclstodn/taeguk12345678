@@ -2,6 +2,7 @@
 export interface Weapon {
   name: string;
   description: string;
+  image?: string;
 }
 
 export interface ClassInfo {
@@ -45,7 +46,8 @@ export const classes: ClassInfo[] = [
     description: '전선을 돌파하는데에 특화된 전투병이다. 어떤 상황에서도 대처 할 수 있는 능력이 필요하다.',
     signatureWeapon: {
       name: 'KAR-13 / K870',
-      description: 'KAR-13: AR15 플랫폼을 기반으로 한 대한민국 현용 특수목적 카빈이다. 5.56mm 탄을 사용한다.\nK870: 근접 전투용 샷건이다.'
+      description: 'KAR-13: AR15 플랫폼을 기반으로 한 대한민국 현용 특수목적 카빈이다. 5.56mm 탄을 사용한다.\nK870: 근접 전투용 샷건이다.',
+      image: 'https://raw.githubusercontent.com/qkrclstodn/site/refs/heads/main/41.webp'
     },
     subWeapon: {
       name: '권총',
@@ -63,7 +65,8 @@ export const classes: ClassInfo[] = [
     description: '방어와 지속적인 전투를 위한 모든 전투 부대의 중추다. 아군을 치료하고 재보급하며 방어 위치를 강화한다.',
     signatureWeapon: {
       name: 'KPX',
-      description: '9mm탄을 사용하는 특수목적 기관단총이다. 경량화 설계가 추가로 들어간 모델이다.'
+      description: '9mm탄을 사용하는 특수목적 기관단총이다. 경량화 설계가 추가로 들어간 모델이다.',
+      image: 'https://raw.githubusercontent.com/qkrclstodn/site/refs/heads/main/42.webp'
     },
     subWeapon: {
       name: '권총',
@@ -81,7 +84,8 @@ export const classes: ClassInfo[] = [
     description: '전장의 기술자이자, 화력지원담당이다. 탑승장비를 파괴, 수리하는 능력이 요구되며, 아군의 화력을 끌어올려야 한다.',
     signatureWeapon: {
       name: 'LMG-15',
-      description: '대한민국 현용 경기관총이다. 5.56mm 탄을 사용한다.'
+      description: '대한민국 현용 경기관총이다. 5.56mm 탄을 사용한다.',
+      image: 'https://raw.githubusercontent.com/qkrclstodn/site/refs/heads/main/44.webp'
     },
     subWeapon: {
       name: '권총',
@@ -98,7 +102,8 @@ export const classes: ClassInfo[] = [
     description: '첩보 및 방첩 작전 요원이다. 멀리서 표적을 무력화하거나 정보를 수집하고 적의 계획을 방해하는 능력이 요구된다.',
     signatureWeapon: {
       name: 'AWK / K28 SDMR',
-      description: 'AWK: 338 라푸아 매그넘을 사용한다. 4x15배율 스코프로 멀리 떨어진 목표도 명중 가능하다.\nK28 SDMR: 7.62mm를 사용하는 지정사수소총이다.'
+      description: 'AWK: 338 라푸아 매그넘을 사용한다. 4x15배율 스코프로 멀리 떨어진 목표도 명중 가능하다.\nK28 SDMR: 7.62mm를 사용하는 지정사수소총이다.',
+      image: 'https://raw.githubusercontent.com/qkrclstodn/site/refs/heads/main/43.webp'
     },
     subWeapon: {
       name: '권총',

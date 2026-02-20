@@ -154,9 +154,9 @@ const Classes = () => (
   </div>
 );
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Shield, Crosshair, Users, Map as MapIcon, Info, ChevronRight, Menu, X, ZoomIn } from 'lucide-react';
+import { Shield, Crosshair, Users, Map as MapIcon, Info, ChevronRight, Menu, X, ZoomIn, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 import { classes, factions, timeline, Faction, ClassInfo, Character } from './data';
 
 // Helper to get character image URL
@@ -172,6 +172,37 @@ const emotions = [
   { id: 6, label: '놀람' },
   { id: 7, label: '전투' },
 ];
+
+const BackgroundMusic = ({ isPlaying, togglePlay }: { isPlaying: boolean; togglePlay: () => void }) => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3; // Set initial volume to 30%
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50">
+      <audio 
+        ref={audioRef} 
+        src="https://raw.githubusercontent.com/qkrclstodn/ost/refs/heads/main/TNO%20OST_%20Toolbox%20Theory.mp3" 
+        loop 
+      />
+      <button
+        onClick={togglePlay}
+        className="bg-red-900/80 hover:bg-red-800 text-white p-3 rounded-full border border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.5)] transition-all"
+      >
+        {isPlaying ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
+      </button>
+    </div>
+  );
+};
 
 const CharacterModal = ({ character, onClose }: { character: Character; onClose: () => void }) => {
   const [currentEmotion, setCurrentEmotion] = useState(1);
@@ -395,9 +426,9 @@ const Map = () => {
   // Seoul is roughly top-left quadrant
   // Busan is bottom-right quadrant
   const markers = [
-    { id: 'jingukwi', x: 32, y: 25, name: '진국위 (서울)', code: '90' },
-    { id: 'hasta', x: 35, y: 27, name: '하스타 (서울)', code: '84' },
-    { id: 'scutum', x: 30, y: 23, name: '스쿠툼 (서울)', code: '85' },
+    { id: 'jingukwi', x: 32, y: 20, name: '진국위 (서울)', code: '90' },
+    { id: 'hasta', x: 38, y: 25, name: '하스타 (서울)', code: '84' },
+    { id: 'scutum', x: 26, y: 28, name: '스쿠툼 (서울)', code: '85' },
     { id: 'lux', x: 75, y: 75, name: '럭스 (부산)', code: '87' },
     { id: 'spectrum', x: 45, y: 40, name: '스펙트룸 (기밀)', code: '86', hidden: true }, // Added for completeness based on request, though initially hidden
   ];
@@ -469,7 +500,15 @@ const Map = () => {
           <h3 className="text-xl font-bold text-white mb-4 border-b border-zinc-700 pb-2">지역 정보</h3>
           {activeLocation ? (
             <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300 flex-1 flex flex-col">
-              <div className="text-red-500 font-bold text-lg">{activeLocation.name}</div>
+              <div className="flex items-center justify-between">
+                <div className="text-red-500 font-bold text-lg">{activeLocation.name}</div>
+                <button 
+                  onClick={() => setActiveMarker(null)}
+                  className="text-xs flex items-center gap-1 text-zinc-400 hover:text-white transition-colors"
+                >
+                  <ArrowLeft className="w-3 h-3" /> 지도 복귀
+                </button>
+              </div>
               
               <div className="relative aspect-video w-full bg-black rounded border border-zinc-700 overflow-hidden mb-2 group">
                 <img 
@@ -512,9 +551,16 @@ export default function App() {
   const [entered, setEntered] = useState(false);
   const [activeTab, setActiveTab] = useState('world');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+
+  // Start music when entering
+  const handleEnter = () => {
+    setEntered(true);
+    setIsMusicPlaying(true);
+  };
 
   if (!entered) {
-    return <EntryScreen onEnter={() => setEntered(true)} />;
+    return <EntryScreen onEnter={handleEnter} />;
   }
 
   const tabs = [
@@ -525,7 +571,22 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-gray-200 font-sans selection:bg-red-900 selection:text-white">
+    <div className="min-h-screen bg-black text-gray-200 font-sans selection:bg-red-900 selection:text-white relative">
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 z-0 opacity-30 pointer-events-none"
+        style={{
+          backgroundImage: 'url(https://raw.githubusercontent.com/qkrclstodn/site/refs/heads/main/40.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      />
+      <div className="fixed inset-0 z-0 bg-black/60 pointer-events-none" />
+
+      {/* Background Music */}
+      <BackgroundMusic isPlaying={isMusicPlaying} togglePlay={() => setIsMusicPlaying(!isMusicPlaying)} />
+
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-black/90 backdrop-blur-md border-b border-red-900/50 h-16 flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
@@ -586,7 +647,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="pt-24 pb-12 px-6 max-w-7xl mx-auto min-h-screen">
+      <main className="pt-24 pb-12 px-6 max-w-7xl mx-auto min-h-screen relative z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -604,7 +665,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-900 py-8 text-center text-zinc-600 text-xs font-mono">
+      <footer className="border-t border-zinc-900 py-8 text-center text-zinc-600 text-xs font-mono relative z-10">
         <p>© 203X BICHEONPA COMMAND. ALL RIGHTS RESERVED.</p>
         <p className="mt-2">PROPAGANDA DEPARTMENT</p>
       </footer>
